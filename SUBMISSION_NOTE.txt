@@ -1,0 +1,5 @@
+IMPORTANT:
+- The output.png files are visual previews of the intended output layout.
+- Run each project locally and take your own final browser/terminal/Postman screenshots before submitting if your teacher specifically asks for live execution screenshots.
+- Do not upload node_modules; run npm install after extracting.
+- The practical concepts are kept aligned with the supplied Practical 1 to 7 document, while theme, data, styling and implementation are newly written.

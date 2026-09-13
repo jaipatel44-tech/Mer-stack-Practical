@@ -1,0 +1,11 @@
+*{box-sizing:border-box}body{font-family:Segoe UI,sans-serif;background:#f2f6f8;color:#213547}
+.app{max-width:900px;margin:auto;padding:55px 24px}.top{display:flex;justify-content:space-between;align-items:end;gap:20px}
+.label{font-size:12px;letter-spacing:2px;font-weight:800;color:#0f766e;margin:0 0 8px}h1{font-size:38px;margin:0}
+select{padding:11px 14px;border:1px solid #cbd5e1;border-radius:10px;background:white}.hint{color:#64748b;margin:15px 0 28px}
+.panel{background:white;border-radius:22px;padding:24px;box-shadow:0 15px 35px rgba(15,23,42,.08)}
+.subject{display:flex;justify-content:space-between;align-items:center;padding:20px 8px;border-bottom:1px solid #edf1f5}
+.subject h3{margin:0 0 5px}.subject p{margin:0;color:#64748b}.stepper{display:flex;align-items:center;gap:14px}
+.stepper button{width:34px;height:34px;border:0;border-radius:50%;background:#dff5f2;color:#0f766e;font-size:20px;cursor:pointer}
+.stepper span{min-width:25px;text-align:center;font-weight:800}.summary{display:flex;justify-content:space-between;padding:22px 8px;font-size:18px}.summary strong{color:#0f766e}
+.save{width:100%;padding:13px;border:0;border-radius:11px;background:#0f766e;color:white;font-weight:800;cursor:pointer}
+@media(max-width:650px){.top{align-items:start;flex-direction:column}}

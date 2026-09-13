@@ -1,0 +1,12 @@
+*{box-sizing:border-box}
+body{font-family:Inter,Segoe UI,sans-serif;background:#f5f7fb;color:#243247}
+.app{max-width:1120px;margin:auto;padding:64px 28px}
+header{text-align:center;margin-bottom:42px}.eyebrow{font-size:12px;letter-spacing:3px;font-weight:800;color:#536dfe}
+h1{font-size:42px;margin:10px 0}.intro{color:#6b7280;font-size:17px}
+.club-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.club-card{background:#fff;border:1px solid #e5e9f0;border-radius:20px;padding:28px;box-shadow:0 12px 30px rgba(31,41,55,.08);position:relative}
+.badge{display:inline-block;background:#eef2ff;color:#4f46e5;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:700}
+.club-card h2{margin:20px 0 18px;font-size:24px}.club-card p{color:#667085;line-height:1.6}
+button{margin-top:14px;width:100%;padding:11px;border:0;border-radius:10px;background:#536dfe;color:white;font-weight:700;cursor:pointer}
+button:hover{transform:translateY(-1px)}
+@media(max-width:800px){.club-grid{grid-template-columns:1fr}.app{padding:40px 18px}}
