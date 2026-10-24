@@ -1,0 +1,11 @@
+import React,{useEffect,useState} from 'react';import './App.css';
+const API='http://localhost:5110/api/tasks';
+export default function App(){
+ const [tasks,setTasks]=useState([]),[title,setTitle]=useState(''),[topic,setTopic]=useState('React'),[error,setError]=useState('');
+ async function load(){try{const r=await fetch(API);if(!r.ok)throw Error('Server error');setTasks(await r.json());setError('')}catch(e){setError('Start backend and MongoDB: '+e.message)}}
+ useEffect(()=>{load()},[]);
+ async function add(e){e.preventDefault();if(!title.trim())return;await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title,topic})});setTitle('');load()}
+ async function toggle(t){await fetch(`${API}/${t._id}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({done:!t.done})});load()}
+ async function remove(t){await fetch(`${API}/${t._id}`,{method:'DELETE'});load()}
+ return <main className="wrap"><header><span className="brand">✦ STUDY SPRINT</span><span className="chip">MERN TASK TRACKER</span></header><section className="hero"><p className="eyebrow">MY LEARNING WORKSPACE</p><h1>Make progress,<br/><em>one task at a time.</em></h1><p>Plan practical work, track completion and stay focused.</p></section><section className="panel"><h2>Add a learning task</h2><form onSubmit={add}><input placeholder="e.g. Complete MongoDB queries" value={title} onChange={e=>setTitle(e.target.value)}/><select value={topic} onChange={e=>setTopic(e.target.value)}>{['React','Node.js','MongoDB','Express','Project'].map(x=><option key={x}>{x}</option>)}</select><button>Add task ↗</button></form></section><section className="panel"><div className="between"><h2>My tasks</h2><span>{tasks.filter(t=>t.done).length}/{tasks.length} completed</span></div>{error&&<p className="error">{error}</p>}{!tasks.length&&<p className="muted">No tasks yet. Add your first one above.</p>}{tasks.map(t=><article key={t._id}><button className="check" onClick={()=>toggle(t)}>{t.done?'✓':'○'}</button><div><strong style={{textDecoration:t.done?'line-through':'none'}}>{t.title}</strong><small>{t.topic}</small></div><button className="remove" onClick={()=>remove(t)}>Delete</button></article>)}</section></main>
+}

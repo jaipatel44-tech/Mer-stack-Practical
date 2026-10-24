@@ -1,0 +1,12 @@
+const express=require('express');
+const app=express(); const PORT=5108;
+app.use(express.json());
+app.use((req,res,next)=>{console.log(`[Campus Helpdesk] ${req.method} ${req.url}`);res.set('X-App','Campus-Helpdesk');next()});
+let tickets=[{id:1,subject:'Wi-Fi access',category:'Network',status:'Open'},{id:2,subject:'Library card',category:'Services',status:'Resolved'}];
+app.get('/',(req,res)=>res.json({app:'Campus Helpdesk API',version:'1.0',endpoints:['GET /api/tickets','GET /api/tickets/:id','GET /api/tickets/search?status=Open','POST /api/tickets']}));
+app.get('/api/tickets',(req,res)=>res.json(tickets));
+app.get('/api/tickets/search',(req,res)=>res.json(tickets.filter(t=>t.status.toLowerCase()===(req.query.status||'').toLowerCase())));
+app.get('/api/tickets/:id',(req,res)=>{const t=tickets.find(x=>x.id===Number(req.params.id));return t?res.json(t):res.status(404).json({error:'Ticket not found'})});
+app.post('/api/tickets',(req,res)=>{const {subject,category}=req.body;if(!subject||!category)return res.status(400).json({error:'subject and category required'});const t={id:Math.max(0,...tickets.map(x=>x.id))+1,subject,category,status:'Open'};tickets.push(t);res.status(201).json(t)});
+app.use((req,res)=>res.status(404).json({error:'Unknown endpoint'}));
+app.listen(PORT,()=>console.log(`Campus Helpdesk API: http://localhost:${PORT}`));
