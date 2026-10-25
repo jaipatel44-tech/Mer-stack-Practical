@@ -1,7 +1,5 @@
-# Practical 12: Pulse Chat Real-Time Messaging
+# Practical 12 — Live Study Room
 
-Original implementation created for Jay. No code or screenshots copied from reference files.
+Socket.IO real-time chat with named rooms and user join/leave notifications. Server port 5312; client port 5186. Messages are relayed live and are not persisted to a database.
 
-In server: `npm install && npm start`. In client: `npm install && npm run dev`. Open http://localhost:5172 in TWO browser tabs; join with two different names and exchange live messages. History is in-memory (last 50 messages).
-
-For MongoDB projects create a local `.env` based on `.env.example`. Never commit credentials.
+Start `server` with `npm install && npm start`; start `client` with `npm install && npm run dev`. Open the client in two browser tabs, enter the same room name and send messages.

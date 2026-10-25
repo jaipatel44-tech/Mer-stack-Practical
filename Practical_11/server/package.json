@@ -1,5 +1,5 @@
 {
-  "name": "jay-practical-11-api",
+  "name": "pranjal-neighbourhood-stories",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -10,8 +10,8 @@
     "express": "^4.21.2",
     "mongoose": "^8.9.5",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.2",
-    "dotenv": "^16.4.7"
+    "jsonwebtoken": "^9.0.2"
   }
 }

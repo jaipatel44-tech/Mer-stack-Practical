@@ -1,7 +1,9 @@
-# Practical 8: Campus Helpdesk Express API
+# Practical 08 — Event RSVP API
 
-Original implementation created for Jay. No code or screenshots copied from reference files.
+Express routing, request middleware, query filtering, parameter routes, validation and error handling. Port 5308. No database; RSVPs are in memory.
 
-Run `cd server`, `npm install`, `npm start`. Test http://localhost:5108/api/tickets in browser or Postman. POST JSON `{"subject":"Classroom projector","category":"Equipment"}`.
+```bash
+cd server && npm install && npm start
+```
 
-For MongoDB projects create a local `.env` based on `.env.example`. Never commit credentials.
+Try `GET /`, `GET /api/events`, `GET /api/events?category=Workshop`, `GET /api/events/1`, and `POST /api/rsvps` with JSON `{"eventId":1,"name":"Asha Mehta","email":"asha@example.com"}`.

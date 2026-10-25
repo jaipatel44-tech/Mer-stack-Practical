@@ -1,7 +1,5 @@
-# Practical 10: Study Sprint MERN Task Board
+# Practical 10 — Habit Garden
 
-Original implementation created for Jay. No code or screenshots copied from reference files.
+A MERN habit tracker with daily streak status, notes and create/toggle/delete operations. API port 5310; Vite client port 5184.
 
-Start MongoDB. In server: `npm install && npm start`. In client: `npm install && npm run dev`. Open http://localhost:5170. Add/toggle/delete tasks to verify database persistence.
-
-For MongoDB projects create a local `.env` based on `.env.example`. Never commit credentials.
+Run server with `cd server && npm install && npm start`; run client with `cd client && npm install && npm run dev`. Requires MongoDB.

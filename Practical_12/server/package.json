@@ -1,5 +1,5 @@
 {
-  "name": "jay-practical-12-api",
+  "name": "pranjal-live-study-room",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "express": "^4.21.2",
-    "socket.io": "^4.8.1",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "socket.io": "^4.8.1"
   }
 }

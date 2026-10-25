@@ -1,7 +1,11 @@
-# Practical 9: Campus File Vault (Multer + MongoDB)
+# Practical 09 — Research Attachment Vault
 
-Original implementation created for Jay. No code or screenshots copied from reference files.
+Upload research attachments with Multer and store metadata in MongoDB. Port 5309. Accepted MIME types: PDF, PNG, JPEG and plain text; maximum size 4 MB.
 
-Start MongoDB; `cd server && npm install && npm start`. Postman: POST http://localhost:5109/api/files → Body → form-data → key `file` (File type). GET /api/files shows MongoDB metadata.
+```bash
+cd server && npm install
+# copy .env.example to .env if changing MongoDB
+npm start
+```
 
-For MongoDB projects create a local `.env` based on `.env.example`. Never commit credentials.
+`POST /api/attachments` multipart form-data field `attachment`; `GET /api/attachments` lists metadata. Uploaded files are saved in `server/uploads`.
