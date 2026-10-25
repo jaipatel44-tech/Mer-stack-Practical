@@ -1,0 +1,17 @@
+require('dotenv').config();
+const express=require('express'),mongoose=require('mongoose'),cors=require('cors'),bcrypt=require('bcryptjs'),jwt=require('jsonwebtoken');
+const app=express();app.use(cors());app.use(express.json());
+const User=mongoose.model('BlogUser',new mongoose.Schema({name:String,email:{type:String,unique:true},passwordHash:String,role:{type:String,enum:['reader','author','admin'],default:'reader'}}));
+const Post=mongoose.model('BlogPost',new mongoose.Schema({title:{type:String,required:true},content:{type:String,required:true},author:{type:mongoose.Schema.Types.ObjectId,ref:'BlogUser',required:true},published:{type:Boolean,default:false}},{timestamps:true}));
+const secret=process.env.JWT_SECRET;if(!secret){console.error('Set JWT_SECRET in .env');process.exit(1)}
+function auth(req,res,next){try{const token=(req.headers.authorization||'').replace(/^Bearer /,'');req.user=jwt.verify(token,secret);next()}catch(e){res.status(401).json({error:'Login required'})}}
+function permit(...roles){return(req,res,next)=>roles.includes(req.user.role)?next():res.status(403).json({error:'Insufficient role'})}
+app.post('/api/register',async(req,res)=>{try{const {name,email,password}=req.body;if(!name||!email||!password||password.length<8)return res.status(400).json({error:'Name, email and 8+ character password required'});const count=await User.countDocuments();const u=await User.create({name,email,passwordHash:await bcrypt.hash(password,10),role:count===0?'admin':'author'});res.status(201).json({message:'Account created',role:u.role})}catch(e){res.status(400).json({error:e.message})}});
+app.post('/api/login',async(req,res)=>{const u=await User.findOne({email:req.body.email});if(!u||!await bcrypt.compare(req.body.password||'',u.passwordHash))return res.status(401).json({error:'Invalid credentials'});res.json({token:jwt.sign({id:u.id,role:u.role,name:u.name},secret,{expiresIn:'4h'}),role:u.role,name:u.name})});
+app.get('/api/posts',async(req,res)=>res.json(await Post.find({published:true}).populate('author','name').sort({createdAt:-1})));
+app.get('/api/mine',auth,async(req,res)=>res.json(await Post.find({author:req.user.id}).sort({createdAt:-1})));
+app.post('/api/posts',auth,permit('author','admin'),async(req,res)=>{try{res.status(201).json(await Post.create({title:req.body.title,content:req.body.content,author:req.user.id,published:false}))}catch(e){res.status(400).json({error:e.message})}});
+app.put('/api/posts/:id',auth,permit('author','admin'),async(req,res)=>{const p=await Post.findById(req.params.id);if(!p)return res.status(404).json({error:'Not found'});if(p.author.toString()!==req.user.id&&req.user.role!=='admin')return res.status(403).json({error:'Not your post'});p.title=req.body.title??p.title;p.content=req.body.content??p.content;await p.save();res.json(p)});
+app.patch('/api/posts/:id/publish',auth,permit('admin'),async(req,res)=>{const p=await Post.findByIdAndUpdate(req.params.id,{published:!!req.body.published},{new:true});res.json(p)});
+app.delete('/api/posts/:id',auth,permit('author','admin'),async(req,res)=>{const p=await Post.findById(req.params.id);if(!p)return res.status(404).json({error:'Not found'});if(p.author.toString()!==req.user.id&&req.user.role!=='admin')return res.status(403).json({error:'Not your post'});await p.deleteOne();res.json({deleted:true})});
+mongoose.connect(process.env.MONGO_URI||'mongodb://127.0.0.1:27017/jay_blog_studio').then(()=>app.listen(5111,()=>console.log('Blog Studio API: http://localhost:5111'))).catch(console.error);

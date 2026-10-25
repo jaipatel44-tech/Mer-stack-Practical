@@ -1,0 +1,13 @@
+require('dotenv').config();
+const express=require('express'),mongoose=require('mongoose'),multer=require('multer'),path=require('path'),fs=require('fs');
+const app=express(),PORT=5109;app.use(express.json());
+const folder=path.join(__dirname,'uploads');fs.mkdirSync(folder,{recursive:true});
+const schema=new mongoose.Schema({originalName:String,storedName:String,mimeType:String,size:Number,uploadedAt:{type:Date,default:Date.now}});
+const File=mongoose.model('UploadRecord',schema);
+const storage=multer.diskStorage({destination:(_,__,cb)=>cb(null,folder),filename:(_,f,cb)=>cb(null,Date.now()+'-'+Math.random().toString(36).slice(2,9)+path.extname(f.originalname))});
+const upload=multer({storage,limits:{fileSize:5*1024*1024},fileFilter:(_,f,cb)=>cb(null,['image/png','image/jpeg','application/pdf','text/plain'].includes(f.mimetype))});
+app.get('/',(_,res)=>res.json({app:'Campus File Vault',routes:['GET /api/files','POST /api/files (form-data key file)']}));
+app.get('/api/files',async(_,res)=>{try{res.json(await File.find().sort({uploadedAt:-1}))}catch(e){res.status(500).json({error:e.message})}});
+app.post('/api/files',upload.single('file'),async(req,res)=>{if(!req.file)return res.status(400).json({error:'Choose PNG, JPEG, PDF or TXT (max 5 MB)'});try{const item=await File.create({originalName:req.file.originalname,storedName:req.file.filename,mimeType:req.file.mimetype,size:req.file.size});res.status(201).json(item)}catch(e){fs.unlink(req.file.path,()=>{});res.status(500).json({error:e.message})}});
+app.use((err,req,res,next)=>res.status(400).json({error:err.message}));
+mongoose.connect(process.env.MONGO_URI||'mongodb://127.0.0.1:27017/jay_file_vault').then(()=>app.listen(PORT,()=>console.log(`File Vault API: http://localhost:${PORT}`))).catch(e=>{console.error('MongoDB unavailable:',e.message);process.exitCode=1});
